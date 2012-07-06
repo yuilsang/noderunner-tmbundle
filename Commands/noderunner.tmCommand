@@ -22,8 +22,6 @@ def terminal_script_filepath
     
       tell application "System Events" 
         keystroke "C" using control down
-        keystroke return
-        keystroke return
       end tell
     
       tell _session
