@@ -9,11 +9,7 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/escape.rb'
 
 def terminal_script_filepath
   %|tell application "iTerm"
-      activate
-      tell application "System Events" 
-        keystroke "C" using control down
-      end tell
-      
+      activate      
       try
               set _session to current session of current terminal
       on error
@@ -23,16 +19,18 @@ def terminal_script_filepath
                       set _session to current session
               end tell
       end try
-    
+      
       tell application "System Events" 
         keystroke "C" using control down
-      end tell
+        delay 1
+      end tell      
     
       tell _session
         write text "node #{e_as(e_sh(ENV['TM_FILEPATH']))}"
       end tell
     end tell|
 end
+
 
 
 open("|osascript", "w") { |io| io &lt;&lt; terminal_script_filepath }
