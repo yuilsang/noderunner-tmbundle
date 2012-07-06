@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape.rb'
+
+def terminal_script_filepath
+  %|tell application "iTerm"
+      activate
+      try
+              set _session to current session of current terminal
+      on error
+              set _term to (make new terminal)
+              tell _term
+                      launch session "Default"
+                      set _session to current session
+              end tell
+      end try
+    
+      tell application "System Events" 
+        keystroke "C" using control down
+        keystroke return
+        keystroke return
+      end tell
+    
+      tell _session
+        write text "node #{e_as(e_sh(ENV['TM_FILEPATH']))}"
+      end tell
+    end tell|
+end
+
+open("|osascript", "w") { |io| io &lt;&lt; terminal_script_filepath }
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>node run</string>
+	<key>outputLocation</key>
+	<string>discard</string>
+	<key>uuid</key>
+	<string>BBC1349A-3484-438A-8755-6CBBECF873B0</string>
+</dict>
+</plist>
